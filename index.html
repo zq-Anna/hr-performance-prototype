@@ -66,13 +66,13 @@
         var suffix = retry ? '?retry=' + encodeURIComponent(retry) : '';
         var css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = './assets/app-98dde258ce94c828.css' + suffix;
+        css.href = './assets/app-a3e090650ba43807.css' + suffix;
         css.onload = function () { cssLoaded = true; finish(); };
         css.onerror = function () { fail('样式文件加载失败，请重新加载。'); };
         document.head.appendChild(css);
         var app = document.createElement('script');
         app.type = 'module';
-        app.src = './assets/app-0c9ff02a89dd7b82.js' + suffix;
+        app.src = './assets/app-8331e256e40763a6.js' + suffix;
         app.onload = function () { appLoaded = true; finish(); };
         app.onerror = function () { fail('程序文件未能下载，请检查网络后重新加载。也可下载匿名离线版。'); };
         document.body.appendChild(app);
