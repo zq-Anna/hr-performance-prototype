@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#a8071a" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23c9152b%22/><text x=%2232%22 y=%2243%22 text-anchor=%22middle%22 font-size=%2238%22 fill=%22white%22>Z</text></svg>" />
+    <title>人力绩效考核系统</title>
+    <style>
+      #startup-screen{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#f3f5f7;font:16px/1.7 system-ui,sans-serif;color:#172033}
+      #startup-screen section{max-width:480px;margin:24px;padding:32px;background:white;border:1px solid #e6e8ec;border-radius:12px}
+      #startup-screen h1{font-size:24px;margin:0 0 16px}#startup-screen p{margin:12px 0}
+      #startup-screen button,#startup-screen a{display:inline-block;margin:8px 12px 0 0;font:inherit;color:#a8071a}
+      #startup-screen button{background:white;border:1px solid #a8071a;border-radius:6px;padding:6px 16px;cursor:pointer}
+    </style>
+  </head>
+  <body>
+    <div id="startup-screen" role="status" aria-live="polite"><section>
+      <h1>人力绩效考核系统</h1>
+      <p id="startup-message">正在加载匿名演示，请稍候…</p>
+      <div id="startup-actions" hidden><button id="startup-retry" type="button">重新加载</button><a href="./offline.html" download="绩效考核匿名演示.html">下载匿名离线版</a></div>
+      <noscript><p>浏览器未启用 JavaScript，无法启动交互演示。请启用后重新打开。</p></noscript>
+    </section></div>
+    <div id="root"></div>
+    <script>
+      (function () {
+        var screen = document.getElementById('startup-screen');
+        var root = document.getElementById('root');
+        var message = document.getElementById('startup-message');
+        var actions = document.getElementById('startup-actions');
+        var failed = false;
+        var appLoaded = false;
+        var cssLoaded = false;
+        var timer;
+        function fail(text) {
+          if (!screen.parentNode) return;
+          failed = true;
+          message.textContent = text;
+          actions.hidden = false;
+        }
+        document.getElementById('startup-retry').onclick = function () {
+          var next = new URL(window.location.href);
+          next.searchParams.set('retry', String(Date.now()));
+          window.location.replace(next.href);
+        };
+        function finish() {
+          if (failed || !appLoaded || !cssLoaded || !root.firstElementChild) return;
+          clearTimeout(timer);
+          observer.disconnect();
+          window.removeEventListener('error', onError);
+          window.removeEventListener('unhandledrejection', onError);
+          screen.remove();
+        }
+        function onError() { fail('页面启动失败。请重新加载；若仍失败，可以下载匿名离线版。'); }
+        var observer = new MutationObserver(finish);
+        observer.observe(root, { childList: true });
+        window.addEventListener('error', onError);
+        window.addEventListener('unhandledrejection', onError);
+        timer = setTimeout(function () {
+          if (!failed) {
+            message.textContent = '加载时间较长，仍在等待页面资源。可重新加载，或下载匿名离线版。';
+            actions.hidden = false;
+          }
+        }, 20000);
+        var retry = new URL(window.location.href).searchParams.get('retry');
+        var suffix = retry ? '?retry=' + encodeURIComponent(retry) : '';
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = './assets/app-c2f47b9df3cf17f0.css' + suffix;
+        css.onload = function () { cssLoaded = true; finish(); };
+        css.onerror = function () { fail('样式文件加载失败，请重新加载。'); };
+        document.head.appendChild(css);
+        var app = document.createElement('script');
+        app.type = 'module';
+        app.src = './assets/app-53cbad87e281614f.js' + suffix;
+        app.onload = function () { appLoaded = true; finish(); };
+        app.onerror = function () { fail('程序文件未能下载，请检查网络后重新加载。也可下载匿名离线版。'); };
+        document.body.appendChild(app);
+      })();
+    </script>
+  </body>
+</html>
